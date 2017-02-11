@@ -37,7 +37,7 @@ class GameBoard:
            print("piece is black")
            inst = self.board[xPos][yPos]
            inst.get_valid_moves(self.board)
-           inst.can_jump_moves(self.board)
+           inst.can_jump_moves(self.board,White)
            inst.print_valid_moves()
            choice = int(input("Enter a choice for your move"))
            self.board = inst.move_piece(self.board,choice)
@@ -56,6 +56,7 @@ class GameBoard:
            print("piece is white")
            inst = self.board[xPos][yPos]
            inst.get_valid_moves(self.board)
+           inst.can_jump_moves(self.board,Black)
            inst.print_valid_moves()
            choice = int(input("Enter a choice for your move"))
            self.board = inst.move_piece(self.board,choice)

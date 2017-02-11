@@ -1,5 +1,6 @@
 #Emmanuil Simkhayev
     #White game piece
+#from Black import Black
 
 class White:
     def __init__(self, xPos, yPos):
@@ -10,6 +11,9 @@ class White:
 
     def __str__(self):
         return self.look
+
+    def __eq__(self, other):
+        return self.look == other
 
     def setX(self, xPos):
         self.xPos = xPos
@@ -37,6 +41,39 @@ class White:
             self.validMove = True
             self.allMoves.append((self.xPos - 1, self.yPos - 1))
 
+    def can_jump_moves(self,board,enemy):
+        self.canJump = False
+        if self.is_enemy(self.tempX -1, self.tempY -1,board,enemy):
+            if self.empty_space(self.tempX -2, self.tempY -2, board):
+                self.allMoves.append((self.tempX -2,self.tempY -2))
+                self.validMove = True
+                self.canJump = True
+                self.tempX -=2
+                self.tempY -=2
+                print("move1")
+                self.can_jump_moves(board,enemy)
+
+
+        if self.is_enemy(self.tempX-1, self.tempY +1, board,enemy):
+            if self.empty_space(self.tempX -2, self.tempY +2, board):
+                self.allMoves.append((self.tempX -2, self.tempY +2))
+                self.validMove = True
+                self.canJump = True
+                self.tempX -=2
+                self.tempY +=2
+                print("move2")
+                self.can_jump_moves(board,enemy)
+
+        self.tempX = self.xPos
+        self.tempY = self.yPos
+
+    def is_enemy(self, xPos, yPos, board,enemy):
+        if self.yPos < 0 or self.yPos >7 or self.xPos <0 or self.xPos >7:
+            return False
+        if isinstance(board[xPos][yPos],enemy):
+            return True
+        return False
+
     def empty_space(self, xPos, yPos, board):
         if yPos < 0 or yPos > 7 or xPos < 0 or xPos > 7:
             return False
@@ -53,7 +90,7 @@ class White:
 
     def move_piece(self, board, choice):
         if (self.validMove == False):
-            print('Black piece {0} , {1} has no moves'.format(self.getX(), self.getY()))
+            print('White piece {0} , {1} has no moves'.format(self.getX(), self.getY()))
             return board
         else:
             coordinates = self.allMoves[choice]
@@ -68,10 +105,10 @@ class White:
                     self.setX(self.xPos - 1)
                     self.setX(self.yPos - 1)
 
-                self.setX(coordinates[0])
-                self.setY(coordinates[1])
-                board[self.getX()][self.getY()] = self
-                self.allMoves.clear()
+            self.setX(coordinates[0])
+            self.setY(coordinates[1])
+            board[self.getX()][self.getY()] = self
+            self.allMoves.clear()
 
         return board
 

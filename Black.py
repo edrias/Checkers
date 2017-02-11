@@ -2,7 +2,7 @@
 #Checkers
     #Instance of black game piece
 from math import*
-from White import White
+#from White import White
 
 
 class Black:
@@ -52,9 +52,9 @@ class Black:
             self.allMoves.append( (self.xPos+1,self.yPos -1) )
 
 
-    def can_jump_moves(self,board):
+    def can_jump_moves(self,board,enemy):
         self.canJump = False
-        if self.is_enemy(self.tempX +1, self.tempY -1,board):
+        if self.is_enemy(self.tempX +1, self.tempY -1,board,enemy):
             if self.empty_space(self.tempX +2, self.tempY -2, board):
                 self.allMoves.append((self.tempX +2,self.tempY -2))
                 self.validMove = True
@@ -62,10 +62,10 @@ class Black:
                 self.tempX +=2
                 self.tempY -=2
                 print("move1")
-                self.can_jump_moves(board)
+                self.can_jump_moves(board,enemy)
 
 
-        if self.is_enemy(self.tempX+1, self.tempY +1, board):
+        if self.is_enemy(self.tempX+1, self.tempY +1, board,enemy):
             if self.empty_space(self.tempX +2, self.tempY +2, board):
                 self.allMoves.append((self.tempX +2, self.tempY +2))
                 self.validMove = True
@@ -73,19 +73,20 @@ class Black:
                 self.tempX +=2
                 self.tempY +=2
                 print("move2")
-                self.can_jump_moves(board)
+                self.can_jump_moves(board,enemy)
 
         self.tempX = self.xPos
         self.tempY = self.yPos
 
 
 
-    def is_enemy(self, xPos, yPos, board):
+    def is_enemy(self, xPos, yPos, board,enemy):
         if self.yPos < 0 or self.yPos >7 or self.xPos <0 or self.xPos >7:
             return False
-        if isinstance(board[xPos][yPos],White):
+        if isinstance(board[xPos][yPos],enemy):
             return True
         return False
+
     def empty_space(self,xPos, yPos, board):
         if yPos <0 or yPos >7 or xPos <0 or xPos >7:
             return False
