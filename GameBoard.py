@@ -31,22 +31,49 @@ class GameBoard:
                 else:
                     count+=1
 
-    def move(self, xPos, yPos):
+    def move_black(self, xPos, yPos):
         #inst = [Black for Black in self.board if Black.getX() == xPos and Black.getY() == yPos]
-        if self.board[xPos][yPos] == Black:
+        if isinstance(self.board[xPos][yPos], Black ):
            print("piece is black")
            inst = self.board[xPos][yPos]
            inst.get_valid_moves(self.board)
-           self.board = inst.move_piece(self.board)
+           inst.can_jump_moves(self.board)
+           inst.print_valid_moves()
+           choice = int(input("Enter a choice for your move"))
+           self.board = inst.move_piece(self.board,choice)
+           return True
+
         else:
+            inst = self.board[xPos][yPos]
+            print(inst)
             print("not black")
-            print(self.board[xPos][yPos])
+            #print(self.board[xPos][yPos])
+            return False
+
+    def move_white(self, xPos, yPos):
+        #inst = [Black for Black in self.board if Black.getX() == xPos and Black.getY() == yPos]
+        if isinstance(self.board[xPos][yPos], White ):
+           print("piece is white")
+           inst = self.board[xPos][yPos]
+           inst.get_valid_moves(self.board)
+           inst.print_valid_moves()
+           choice = int(input("Enter a choice for your move"))
+           self.board = inst.move_piece(self.board,choice)
+           return True
+
+        else:
+            inst = self.board[xPos][yPos]
+            print(inst)
+            print("not white")
+            #print(self.board[xPos][yPos])
+            return False
 
     def printBoard(self):
+        print("Printing board")
         for i in range(self.w):
             #index= elem
             for j in range(self.h):
-                print(self.board[i][j], end = " ")
+                print(self.board[i][j] , end= " ")
             print(end="\n")
 
 
