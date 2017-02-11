@@ -107,21 +107,29 @@ class Black:
             return board
         else:
             coordinates = self.allMoves[choice]
+            print('new coordiantes = {0}, {1}'.format(coordinates[0],coordinates[1]))
+            print ('current position = {0}, {1}'.format(self.getX(),self.getY()))
+
             index = abs(self.yPos - coordinates[1])
             print(index)
             for i in range(index):
-                board[self.xPos][self.yPos] =". "
                 if coordinates[1] > self.yPos:
+                    board[self.xPos][self.yPos] =". "
                     self.setX(self.xPos + 1)
                     self.setY(self.yPos + 1)
+                    print('{0}, {1}'.format(self.getX(), self.getY()))
                 else:
+                    board[self.xPos][self.yPos] = ". "
                     self.setX(self.xPos + 1 )
-                    self.setX(self.yPos - 1 )
+                    self.setY(self.yPos - 1 )
+                    print('{0}, {1}'.format(self.getX(), self.getY()))
+                #print('{0}, {1}'.format(self.getX(), self.getY()))
 
-                self.setX(coordinates[0])
-                self.setY(coordinates[1])
-                board[self.getX()][self.getY()] = self
-                self.allMoves.clear()
+
+            self.setX(coordinates[0])
+            self.setY(coordinates[1])
+            board[self.getX()][self.getY()] = self
+            self.allMoves.clear()
 
         return board
 
