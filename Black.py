@@ -12,6 +12,7 @@ class Black:
         self.look = "b "
         self.validMove = False
         self.allMoves = [(x,y) for x in range(25) for y in range(25)]
+        self.isKing = False
 
     #returns a string that represents the object as a string
     def __str__(self):
@@ -19,9 +20,6 @@ class Black:
 
     def __eq__(self, other):
         return self.look == other
-
-
-
 
     def setX(self, xPos):
         self.xPos = xPos
@@ -51,6 +49,14 @@ class Black:
             self.validMove = True
             self.allMoves.append( (self.xPos+1,self.yPos -1) )
 
+        if self.isKing == True:
+            if (self.empty_space(self.xPos - 1, self.yPos + 1, board)):
+                self.validMove = True
+                # add coordinates to list
+                self.allMoves.append((self.xPos - 1, self.yPos + 1))
+            if (self.empty_space(self.xPos - 1, self.yPos - 1, board)):
+                self.validMove = True
+                self.allMoves.append((self.xPos - 1, self.yPos - 1))
 
     def can_jump_moves(self,board,enemy):
         self.canJump = False
@@ -75,13 +81,34 @@ class Black:
                 print("move2")
                 self.can_jump_moves(board,enemy)
 
+        if self.isKing == True:
+            if self.is_enemy(self.tempX - 1, self.tempY - 1, board, enemy):
+                if self.empty_space(self.tempX - 2, self.tempY - 2, board):
+                    self.allMoves.append((self.tempX - 2, self.tempY - 2))
+                    self.validMove = True
+                    self.canJump = True
+                    self.tempX -= 2
+                    self.tempY -= 2
+                    print("move1")
+                    self.can_jump_moves(board, enemy)
+
+            if self.is_enemy(self.tempX - 1, self.tempY + 1, board, enemy):
+                if self.empty_space(self.tempX - 2, self.tempY + 2, board):
+                    self.allMoves.append((self.tempX - 2, self.tempY + 2))
+                    self.validMove = True
+                    self.canJump = True
+                    self.tempX -= 2
+                    self.tempY += 2
+                    print("move2")
+                    self.can_jump_moves(board, enemy)
+
         self.tempX = self.xPos
         self.tempY = self.yPos
 
 
 
     def is_enemy(self, xPos, yPos, board,enemy):
-        if self.yPos < 0 or self.yPos >7 or self.xPos <0 or self.xPos >7:
+        if yPos < 0 or yPos >7 or xPos <0 or xPos >7:
             return False
         if isinstance(board[xPos][yPos],enemy):
             return True
@@ -101,6 +128,14 @@ class Black:
             print("{0}. {1}".format(count, elem))
             count+=1
 
+    def checkKing(self):
+        print("Black is in checkKing method")
+        print("{0} , {1}".format(self.xPos, self.yPos))
+        if self.xPos == 7:
+            print("Piece is a King")
+            print("{0} , {1}".format(self.xPos, self.yPos))
+            self.isKing = True
+            self.look = "bK "
 
     def move_piece(self, board, choice):
         if(self.validMove == False):
@@ -111,7 +146,7 @@ class Black:
             print('new coordiantes = {0}, {1}'.format(coordinates[0],coordinates[1]))
             print ('current position = {0}, {1}'.format(self.getX(),self.getY()))
 
-            index = abs(self.yPos - coordinates[1])
+            index = abs(self.xPos - coordinates[0])
             print(index)
             for i in range(index):
                 if coordinates[1] > self.yPos:
@@ -133,11 +168,3 @@ class Black:
             self.allMoves.clear()
 
         return board
-
-
-
-
-
-
-
-

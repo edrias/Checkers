@@ -8,6 +8,7 @@ class White:
         self.yPos = yPos
         self.look = "w "
         self.allMoves = [(x, y) for x in range(25) for y in range(25)]
+        self.isKing = False
 
     def __str__(self):
         return self.look
@@ -41,6 +42,16 @@ class White:
             self.validMove = True
             self.allMoves.append((self.xPos - 1, self.yPos - 1))
 
+        if self.isKing == True:#if piece is king then we perform the check for black pieces also
+            if (self.empty_space(self.xPos + 1, self.yPos + 1, board)):
+                self.validMove = True
+                # add coordinates to list
+                self.allMoves.append((self.xPos + 1, self.yPos + 1))
+            if (self.empty_space(self.xPos + 1, self.yPos - 1, board)):
+                self.validMove = True
+                self.allMoves.append((self.xPos + 1, self.yPos - 1))
+
+
     def can_jump_moves(self,board,enemy):
         self.canJump = False
         if self.is_enemy(self.tempX -1, self.tempY -1,board,enemy):
@@ -64,11 +75,31 @@ class White:
                 print("move2")
                 self.can_jump_moves(board,enemy)
 
+        if self.isKing == True:#if isKing is true then white performs same checks as black
+            if self.is_enemy(self.tempX + 1, self.tempY - 1, board, enemy):
+                if self.empty_space(self.tempX + 2, self.tempY - 2, board):
+                    self.allMoves.append((self.tempX + 2, self.tempY - 2))
+                    self.validMove = True
+                    self.canJump = True
+                    self.tempX += 2
+                    self.tempY -= 2
+                    print("move1")
+                    self.can_jump_moves(board, enemy)
+
+            if self.is_enemy(self.tempX + 1, self.tempY + 1, board, enemy):
+                if self.empty_space(self.tempX + 2, self.tempY + 2, board):
+                    self.allMoves.append((self.tempX + 2, self.tempY + 2))
+                    self.validMove = True
+                    self.canJump = True
+                    self.tempX += 2
+                    self.tempY += 2
+                    print("move2")
+                    self.can_jump_moves(board, enemy)
         self.tempX = self.xPos
         self.tempY = self.yPos
 
     def is_enemy(self, xPos, yPos, board,enemy):
-        if self.yPos < 0 or self.yPos >7 or self.xPos <0 or self.xPos >7:
+        if yPos < 0 or yPos >7 or xPos <0 or xPos >7:
             return False
         if isinstance(board[xPos][yPos],enemy):
             return True
@@ -88,27 +119,44 @@ class White:
             print("{0}. {1}".format(count, elem))
             count += 1
 
+    def checkKing(self):
+        #print("White In checkKing method")
+        if self.xPos == 0:
+            self.isKing = True
+            self.look = "wK "
+
     def move_piece(self, board, choice):
         if (self.validMove == False):
             print('White piece {0} , {1} has no moves'.format(self.getX(), self.getY()))
             return board
         else:
             coordinates = self.allMoves[choice]
-            index = abs(self.yPos - coordinates[1])
-
+            index = abs(self.xPos - coordinates[0])
+            list = []
             for i in range(index):
                 board[self.xPos][self.yPos] = ". "
+                print("*ycoord = {0} currcoords = {1}".format(coordinates[1], self.yPos))
                 if coordinates[1] > self.yPos:
+                    print("ycoord = {0} currcoords = {1}".format(coordinates[1],self.yPos))
+                    print("moving left and up")
                     self.setX(self.xPos - 1)
                     self.setY(self.yPos + 1)
-                else:
-                    self.setX(self.xPos - 1)
-                    self.setX(self.yPos - 1)
 
-            self.setX(coordinates[0])
-            self.setY(coordinates[1])
-            board[self.getX()][self.getY()] = self
-            self.allMoves.clear()
+                else:
+                    print("ycoord = {0} currcoords = {1}".format(coordinates[1], self.yPos))
+                    print("moving right and up")
+                    self.setX(self.xPos - 1)
+                    self.setY(self.yPos - 1)
+            #board[self.getX()][self.getY()] = self
+                list.append((self.getX(), self.getY()))
+            print('{0}, {1}'.format(self.getX(), self.getY()))
+                #print('{0}, {1}'.format(self.getX(), self.getY()))
+        print(list)
+        self.setX(coordinates[0])
+        self.setY(coordinates[1])
+        board[self.getX()][self.getY()] = self
+        self.allMoves.clear()
 
         return board
+
 
