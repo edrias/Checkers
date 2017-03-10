@@ -32,7 +32,7 @@ class GameBoard:
                 else:
                     count+=1
 
-    def move(self, xPos, yPos, piece, enemy ):
+    def move(self, xPos, yPos, piece, enemy):
         # make sure coordinates chosen are indeed black
         if isinstance(self.board[xPos][yPos], piece):
             print("piece is {0}".format(piece))
@@ -42,7 +42,7 @@ class GameBoard:
             inst.print_valid_moves()
             if len(inst.allMoves) == 0:  # if there are no moves then return false
                 return False
-            else:  # if there are moves, they will be displayed and user enters a number corresponding to the move
+            else:  #if there are moves, they will be displayed and user enters a number corresponding to the move
                 choice = int(input("Enter a choice for your move"))
                 self.board = inst.move_piece(self.board, choice)  # update the board
                 inst.checkKing()  # check if piece is a king after moving.
@@ -54,10 +54,22 @@ class GameBoard:
             print("not {0}".format(piece))
             return False
 
+    def check_valid_move(self,xPos, yPos, piece, enemy):
+        if isinstance(self.board[xPos][yPos], piece):
+            #print("piece is {0}".format(piece))
+            inst = self.board[xPos][yPos]  # assign this black piece to value inst
+            inst.get_valid_moves(self.board)
+            inst.can_jump_moves(self.board, enemy)  # moves where piece can jump enemy
+            #inst.print_valid_moves()
+
+            if len(inst.allMoves) == 0:  # if there are no moves then return false
+                return False
+        return True
+
+
     def printBoard(self):
         print("Printing board")
         for i in range(self.w):
-            #index= elem
             for j in range(self.h):
                 print(self.board[i][j] , end= " ")
             print(end="\n")

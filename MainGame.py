@@ -9,8 +9,10 @@ print("======================")
 game.initialize_emptySpaces()
 game.set_gamePieces()
 game.printBoard()
-player1_moves = [(5,0),(5,2),(6,1),(7,0),(5,6)]
-player2_moves = [(2,1),(2,3),(3,0),(5,2),(7,0)]
+#for debugging#player1_moves = [(5,0),(5,2),(6,1),(7,0),(5,6)]
+#for debugging#player2_moves = [(2,1),(2,3),(3,0),(5,2),(7,0)]
+white_valid_moves = []
+black_valid_moves = []
 count = 0
 
 
@@ -20,41 +22,62 @@ count = 0
 while(True):
     game.printBoard()
     didMove = False
+    white_valid_moves.clear()
     game.location_of_white()
+
+    for i in range(len(game.list_of_white)):
+        coordinates = game.list_of_white[i]
+        #print("Coordinates {0}".format(coordinates))
+        if game.check_valid_move( coordinates[0],coordinates[1], White, Black,):
+            white_valid_moves.append(coordinates)
+
+
+    if len(white_valid_moves) == 0:
+        print("Player 2 Wins!")
+        break# game over
+
     while(didMove == False):
         print("Player ones turn")
-        #x = int(input("Enter x coordinate"))
-        #y = int(input("Enter y coordinate"))
-        #index = randint(0,len(game.list_of_white)-1)
-        #game.move_white(x,y)
-        move = player1_moves[count]
-        #coordinates = game.list_of_white[index]
+        print("Here are your valid moves")
+        print(white_valid_moves)
 
-        didMove = game.move(move[0],move[1], White, Black)
+        choice = int(input("Enter a choice corresponding to the index of the list"))
+
+
+        move = white_valid_moves[0]
+        coordinates = game.list_of_white[choice]
+        print("Move {0}".format(move))
+
+        didMove = game.move(coordinates[0],coordinates[1], White, Black)
         game.printBoard()
 
 
     didMove = False
     game.location_of_black()
+    black_valid_moves.clear()
+    for i in range(len(game.list_of_black)):
+        coordinates = game.list_of_black[i]
+        #print("Coordinates {0}".format(coordinates))
+        if game.check_valid_move(coordinates[0],coordinates[1], Black, White):
+            black_valid_moves.append(coordinates)
+    if len(black_valid_moves) == 0:
+        print("Player 1 Wins!")
+        break
+
 
     while(didMove == False):
         print("Player twos turn")
-        #print(game.list_of_black)
-        #index = randint(0,len(game.list_of_black))
-        #print(index)
+        print("Here are your valid moves")
+        print(black_valid_moves)
 
-        #coordinates = game.list_of_black[index]
-        #x = int(input("Enter x coordinate"))
-        #y = int(input("Enter y coordinate"))
-        move = player2_moves[count]
+        choice = int(input("Enter a choice corresponding to the index of the list"))
 
-        didMove = game.move(move[0],move[1], Black, White)
-        #didMove = game.move_black(x,y)
+        move = black_valid_moves[choice]
+        print("Move {0}".format(move))
+
+
+        didMove = game.move(coordinates[0],coordinates[1], Black, White)
 
         #game.printBoard()
 
-    count+=1
-
-
-#NEXT IS KING PIECES!
-
+    #count+=1

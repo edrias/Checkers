@@ -10,10 +10,13 @@ class Black:
         self.xPos = xPos
         self.yPos = yPos
         self.look = "b "
+
         self.validMove = False
+
         self.allMoves = [(x,y) for x in range(25) for y in range(25)]
         self.isKing = False
 
+        #
     #returns a string that represents the object as a string
     def __str__(self):
         return self.look
@@ -67,7 +70,7 @@ class Black:
                 self.canJump = True
                 self.tempX +=2
                 self.tempY -=2
-                print("move1")
+                #print("move1")
                 self.can_jump_moves(board,enemy)
 
 
@@ -78,7 +81,7 @@ class Black:
                 self.canJump = True
                 self.tempX +=2
                 self.tempY +=2
-                print("move2")
+                #print("move2")
                 self.can_jump_moves(board,enemy)
 
         if self.isKing == True:
@@ -89,7 +92,7 @@ class Black:
                     self.canJump = True
                     self.tempX -= 2
                     self.tempY -= 2
-                    print("move1")
+                    #print("King move1")
                     self.can_jump_moves(board, enemy)
 
             if self.is_enemy(self.tempX - 1, self.tempY + 1, board, enemy):
@@ -99,11 +102,10 @@ class Black:
                     self.canJump = True
                     self.tempX -= 2
                     self.tempY += 2
-                    print("move2")
+                    #print("king move 2")
                     self.can_jump_moves(board, enemy)
 
-        self.tempX = self.xPos
-        self.tempY = self.yPos
+
 
 
 
